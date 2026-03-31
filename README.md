@@ -38,7 +38,8 @@ The backend is built with FastAPI. It needs to be running for the dashboard and 
 ```bash
 python -m uvicorn src.Api.main:app --reload --host 0.0.0.0 --port 8000
 ```
-*The API will be available at http://localhost:8000. You can view the docs at http://localhost:8000/docs.*
+
+*The API will be available at <http://localhost:8000>. You can view the docs at <http://localhost:8000/docs>.*
 
 ### 3. Start the Streamlit Dashboard
 
@@ -47,7 +48,8 @@ To start the interactive frontend dashboard, open a second terminal, activate yo
 ```bash
 python -m streamlit run dashboard/streamlit_app.py
 ```
-*Your browser should automatically open the dashboard at http://localhost:8501.*
+
+*Your browser should automatically open the dashboard at <http://localhost:8501>.*
 
 ### 4. Run the Data Pipeline
 

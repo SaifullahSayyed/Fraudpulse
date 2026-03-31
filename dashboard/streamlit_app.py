@@ -146,6 +146,25 @@ st.markdown("""
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 5px;
 }
+
+/* ── Sidebar Contrast Fix ───────────────────────────────────────────────── */
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+[data-testid="stSidebar"] label, 
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span {
+    color: #0f172a !important;
+    font-weight: 500 !important;
+}
+
+/* Ensure secondary labels and help text are also visible */
+[data-testid="stSidebar"] .st-bs, [data-testid="stSidebar"] .st-as {
+    color: #475569 !important;
+}
+
+/* Fix for number input text visibility if it's too light */
+[data-testid="stSidebar"] input {
+    color: #0f172a !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
