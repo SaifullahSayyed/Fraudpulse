@@ -151,19 +151,32 @@ st.markdown("""
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"],
 [data-testid="stSidebar"] label, 
 [data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span {
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] .stMarkdown {
     color: #0f172a !important;
     font-weight: 500 !important;
 }
 
-/* Ensure secondary labels and help text are also visible */
-[data-testid="stSidebar"] .st-bs, [data-testid="stSidebar"] .st-as {
-    color: #475569 !important;
+/* Force light background and dark text for ALL inputs (Number inputs, text inputs, etc.) */
+[data-testid="stSidebar"] input {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
 }
 
-/* Fix for number input text visibility if it's too light */
-[data-testid="stSidebar"] input {
+/* Fix for slider track and labels */
+[data-testid="stSidebar"] .stSlider [data-testid="stWidgetLabel"] p {
     color: #0f172a !important;
+}
+
+/* Ensure secondary labels and help text are also visible */
+[data-testid="stSidebar"] .st-bs, [data-testid="stSidebar"] .st-as {
+    color: #334155 !important;
+}
+
+/* Ensure help icons and tooltips aren't white-on-white */
+[data-testid="stSidebar"] [data-testid="stTooltipIcon"] {
+    color: #2563eb !important;
 }
 </style>
 """, unsafe_allow_html=True)
