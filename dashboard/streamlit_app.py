@@ -137,6 +137,10 @@ if "history" not in st.session_state:
     st.session_state.history: list[dict] = []
 if "last_result" not in st.session_state:
     st.session_state.last_result: dict | None = None
+if "latitude" not in st.session_state:
+    st.session_state.latitude = 40.7128
+if "longitude" not in st.session_state:
+    st.session_state.longitude = -74.0060
 st.markdown("""
 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
     <div>
@@ -177,13 +181,13 @@ with st.sidebar:
 
     c_lat, c_lon = st.columns(2)
     with c_lat:
-        latitude = st.number_input("Latitude", value=40.7128, format="%.4f")
+        latitude = st.number_input("Latitude", value=st.session_state.latitude, format="%.4f")
     with c_lon:
-        longitude = st.number_input("Longitude", value=-74.0060, format="%.4f")
+        longitude = st.number_input("Longitude", value=st.session_state.longitude, format="%.4f")
 
     if st.button("🎲 Randomize Location"):
-        latitude = round(random.uniform(-90, 90), 4)
-        longitude = round(random.uniform(-180, 180), 4)
+        st.session_state.latitude = round(random.uniform(-90, 90), 4)
+        st.session_state.longitude = round(random.uniform(-180, 180), 4)
         st.rerun()
 
     st.markdown('<div class="sidebar-section">Risk Heuristics</div>', unsafe_allow_html=True)
