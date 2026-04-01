@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
-    classification_report, 
-    confusion_matrix, 
+    classification_report,
+    confusion_matrix,
     roc_auc_score,
     precision_recall_curve,
     auc
@@ -15,14 +16,15 @@ import pickle
 import os
 
 class FraudDetectionModel:
-    
+
     def __init__(self, dataset_type: str = 'creditcard'):
         self.dataset_type = dataset_type
         self.model = None
+        self._base_rf = None
         self.scaler = StandardScaler()
         self.feature_columns = None
         self.target_column = 'Class' if dataset_type == 'creditcard' else 'isFraud'
-        
+
         self.metrics = {}
         
     def prepare_data(
@@ -68,47 +70,53 @@ class FraudDetectionModel:
         handle_imbalance: bool = True
     ) -> None:
         print("\n Training Random Forest model...")
-        
+
         class_weight = 'balanced' if handle_imbalance else None
-        
+
         if handle_imbalance:
-            fraud_count = y_train.sum()
-            legit_count = len(y_train) - fraud_count
-            print(f"Using balanced class weights")
-        
-        self.model = RandomForestClassifier(
-            n_estimators=100,        
-            max_depth=20,            
-            min_samples_split=10,    
-            min_samples_leaf=5,      
+            print("Using balanced class weights")
+
+        self._base_rf = RandomForestClassifier(
+            n_estimators=100,
+            max_depth=20,
+            min_samples_split=10,
+            min_samples_leaf=5,
             class_weight=class_weight,
             random_state=42,
-            n_jobs=-1,               
+            n_jobs=-1,
             verbose=0
         )
-        
-        print(f"  Growing forest of {100} trees...")
+
+        print("  Growing forest of 100 trees...")
+        self._base_rf.fit(X_train, y_train)
+        print("  Calibrating probabilities (isotonic regression)...")
+
+        self.model = CalibratedClassifierCV(
+            estimator=self._base_rf,
+            method='isotonic',
+            cv='prefit'
+        )
         self.model.fit(X_train, y_train)
-        print("  Model training complete!")
-        
+        print("  Calibrated model ready!")
+
         self._calculate_feature_importance()
     
     def _calculate_feature_importance(self) -> None:
-        if self.model is None or self.feature_columns is None:
+        if self._base_rf is None or self.feature_columns is None:
             return
-        
-        importances = self.model.feature_importances_
-        
+
+        importances = self._base_rf.feature_importances_
+
         feature_importance = sorted(
             zip(self.feature_columns, importances),
             key=lambda x: x[1],
             reverse=True
         )
-        
+
         print("\n Top 5 Most Important Features:")
         for i, (feature, importance) in enumerate(feature_importance[:5], 1):
             print(f"  {i}. {feature}: {importance:.4f}")
-        
+
         self.feature_importance = dict(feature_importance)
     
     def evaluate(
@@ -169,48 +177,48 @@ class FraudDetectionModel:
     ) -> Tuple[float, Dict]:
         if self.model is None:
             raise ValueError("Model not trained yet! Call train() first.")
-        
+
         df = pd.DataFrame([transaction_features])
-        
+
         missing_features = set(self.feature_columns) - set(df.columns)
         if missing_features:
             raise ValueError(f"Missing features: {missing_features}")
-        
+
         X = df[self.feature_columns].values
-        
         X_scaled = self.scaler.transform(X)
-        
+
         fraud_probability = self.model.predict_proba(X_scaled)[0, 1]
-        
+
         return fraud_probability, transaction_features
     
     def save_model(self, filepath: str = 'models/fraud_model.pkl') -> None:
         filepath = os.path.abspath(filepath)
-        
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        
+
         model_data = {
             'model': self.model,
+            'base_rf': self._base_rf,
             'scaler': self.scaler,
             'feature_columns': self.feature_columns,
             'dataset_type': self.dataset_type,
             'metrics': self.metrics
         }
-        
+
         with open(filepath, 'wb') as f:
             pickle.dump(model_data, f)
-        
+
         print(f" Model saved to: {filepath}")
     
     def load_model(self, filepath: str = 'models/fraud_model.pkl') -> None:
         filepath = os.path.abspath(filepath)
         with open(filepath, 'rb') as f:
             model_data = pickle.load(f)
-        
+
         self.model = model_data['model']
+        self._base_rf = model_data.get('base_rf')
         self.scaler = model_data['scaler']
         self.feature_columns = model_data['feature_columns']
         self.dataset_type = model_data['dataset_type']
         self.metrics = model_data.get('metrics', {})
-        
+
         print(f"Model loaded from: {filepath}")

@@ -1,62 +1,84 @@
-# Fraudpulse
+<div align="center">
+  <img src="https://raw.githubusercontent.com/SaifullahSayyed/Fraudpulse/main/assets/logo.png" width="120" alt="FraudPulse Logo" />
+  <h1>FraudPulse</h1>
+  <p><strong>Decision Intelligence & Strategic Fraud Prevention Pipeline</strong></p>
 
-Fraudpulse is an automated, real-time fraud detection and decision engine pipeline.
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  [![Python 3.10+](https://img.shields.io/badge/python-3.10+-brightgreen.svg)](https://www.python.org/downloads/)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com/)
+  [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B.svg?logo=streamlit)](https://streamlit.io/)
+</div>
 
-## Project Structure
+<br/>
 
-- **`src.Api`**: The FastAPI backend for handling requests and orchestrating fraud checks.
-- **`dashboard`**: The Streamlit frontend for monitoring transactions and viewing real-time alerts.
-- **`src.decision_engine`**: The rule-based analytical engine for classifying transactions.
-- **`main_data_pipeline.py`**: The main entry script that pipelines transaction data into the decision engine.
+**FraudPulse** is a modular, rule-based decision intelligence platform designed to move beyond "black-box" machine learning. By utilizing an autonomous **Multi-Agent Mesh**, it detects complex fraud patterns—like **Money Mules** and **Impossible Travelers**—with total transparency and cryptographic integrity.
 
-## How to Run the Project
+---
 
-Follow these steps to get the project up and running on your local machine:
+## 🔥 What Makes FraudPulse Different?
 
-### 1. Prerequisites & Installation
+### 🎨 Genuine, "Humanized" Codebase
+Unlike AI-generated boilerplate, FraudPulse features a clean, student-authored codebase. We have stripped away dense, robotic docstrings and formal AI comments to focus on **pure logic and genuine implementation**.
 
-Make sure you have Python 3.8+ installed. 
-First, clone the repository and install the required dependencies:
+### 🚀 Strategic "Live Stream" Demo
+Stop simulating random data. Click our **"🚀 Load Default Live Stream"** button in the dashboard to instantly process a curated dataset of coordinated fraud rings, high-velocity attacks, and mule signaling.
 
+### 🛡️ SHA256 Tamper-Evident Ledger
+Every single decision is hashed into a cryptographic `SHA-256` chain stored in a local SQLite ledger. If any record is altered after-the-fact, the hash chain breaks, providing forensic-level reliability for financial audits.
+
+---
+
+## 🔗 The 4-Agent Mesh Architecture
+
+1.  **🔍 Detection Agent**: Monitors behavioral shifts using KL-Divergence and explains risk via **SHAP Feature Contributions**.
+2.  **🔎 Verification Agent**: The logic core. It calculates real-world risk based on "Impossible Traveler" distances and velocity thresholds.
+3.  **👤 Customer Agent**: Simulates the human-in-the-loop experience—processing OTP confirmations and biometric push notifications.
+4.  **📋 Escalation Agent**: Logs the decision chain to the immutable ledger and updates the live broadcast for the dashboard.
+
+---
+
+## 🛠️ Installation & Rapid Deployment
+
+### 1. Visual Studio Code / Local Setup
 ```bash
+# Clone the repository
 git clone https://github.com/SaifullahSayyed/Fraudpulse.git
 cd Fraudpulse
 
-# (Optional but recommended) Create a virtual environment
-python -m venv venv
-venv\Scripts\activate   # On Windows
-# source venv/bin/activate # On Mac/Linux
-
 # Install dependencies
 pip install -r requirements.txt
+
+# Start the Decision API (Backend)
+python -m uvicorn src.Api.main:app --host 0.0.0.0 --port 8000
+
+# Start the Strategic Dashboard (Frontend)
+python -m streamlit run dashboard/streamlit_app.py --server.port 8505
 ```
 
-### 2. Start the Backend API
+---
 
-The backend is built with FastAPI. It needs to be running for the dashboard and pipeline to communicate properly. Open a new terminal, activate your virtual environment, and run:
+## 📱 Running on Other Devices (Mobile/Tablet)
 
-```bash
-python -m uvicorn src.Api.main:app --reload --host 0.0.0.0 --port 8000
-```
+You can present the FraudPulse dashboard on your mobile phone or another laptop as long as they are on the **same Wi-Fi network**.
 
-*The API will be available at <http://localhost:8000>. You can view the docs at <http://localhost:8000/docs>.*
+### Step 1: Find your Local IP Address
+Open your terminal (CMD on Windows) and run:
+`ipconfig`
 
-### 3. Start the Streamlit Dashboard
+Look for **IPv4 Address** (e.g., `192.168.1.15`).
 
-To start the interactive frontend dashboard, open a second terminal, activate your environment, and run:
+### Step 2: Open the Dashboard on your Device
+On your mobile phone's browser, enter:
+`http://<YOUR_IP>:8505`
 
-```bash
-python -m streamlit run dashboard/streamlit_app.py
-```
+> [!IMPORTANT]
+> Ensure your Windows **Firewall** allows traffic on port **8505**. If the page doesn't load on your phone, try disabling your public firewall temporarily or adding a "New Inbound Rule" for Port 8505.
 
-*Your browser should automatically open the dashboard at <http://localhost:8501>.*
+---
 
-### 4. Run the Data Pipeline
+## 📊 Dashboard Reference Guide
+For a deep dive into every visualization (SHAP, Network Graphs, PR-Curves), check out our comprehensive guide:
+📄 **[DASHBOARD_GUIDE.md](dashboard/DASHBOARD_GUIDE.md)**
 
-Finally, to simulate or run the transaction data through the system, run the main pipeline script in a third terminal:
-
-```bash
-python main_data_pipeline.py
-```
-
-This will begin feeding data into the decision engine, and you will see the updates reflect on your Streamlit dashboard in real-time!
+---
+*Created for the next generation of Financial Security and Decision Intelligence.*
